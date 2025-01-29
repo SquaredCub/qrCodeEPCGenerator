@@ -2,6 +2,13 @@
 
 This repository will let you fill a form to generate a QR Code that can be scanned by your bank app to easily pay your invoices.
 
+# Documentation
+
+-   [QR Code Wikipedia](https://en.wikipedia.org/wiki/QR_code)
+-   [EPC QR Code Wikipedia](https://en.wikipedia.org/wiki/EPC_QR_code)
+-   [International Bank Account Number (IBAN) Wikipedia](https://en.wikipedia.org/wiki/International_Bank_Account_Number)
+-   [IMask Documentation](https://imask.js.org/guide.html#masked-base)
+
 # Developement
 
 ### React + TypeScript + Vite Template
