@@ -16,26 +16,32 @@ const checkAndcompileQRString = (
     ACCOUNT: string,
     AMOUNT: string,
     COMM: string
-) => {
+): [string, string[]] => {
+    let errors: string[] = [];
     if (BIC.length !== 8 || !BIC) {
-        throw new Error("BIC must be 8 characters long");
+        errors.push("BIC must be 8 characters long");
     }
     if (isNaN(Number(AMOUNT)) || !AMOUNT) {
-        throw new Error("Amount must be a number");
+        errors.push("Amount must be a number");
     }
     if (COMM.length !== 12 || !COMM) {
-        throw new Error("COMM must be 12 characters long");
+        errors.push("COMM must be 12 characters long");
     }
 
-    return `BCD\n001\n1\nSCT\n${BIC}\n${
-        TO ?? "Name missing"
-    }\n${ACCOUNT}\nEUR${AMOUNT}\n\n${COMM.replace(
-        /(\d{3})(\d{4})(\d{5})/,
-        "$1/$2/$3"
-    )}`;
+    return [
+        `BCD\n001\n1\nSCT\n${BIC}\n${
+            TO ?? "Name missing"
+        }\n${ACCOUNT}\nEUR${AMOUNT}\n\n${COMM.replace(
+            /(\d{3})(\d{4})(\d{5})/,
+            "$1/$2/$3"
+        )}`,
+        errors,
+    ];
 };
 
-export const getStringFromForm = (form: EventTarget): [string, boolean] => {
+export const getStringFromForm = (
+    form: EventTarget
+): [string, string[], boolean] => {
     const {
         BIC: { value: BICValue, placeholder: BICPlaceholder },
         TO: { value: TOValue, placeholder: TOPlaceholder },
@@ -46,7 +52,7 @@ export const getStringFromForm = (form: EventTarget): [string, boolean] => {
 
     if (!BICValue && !TOValue && !ACCOUNTValue && !AMOUNTValue && !COMMValue) {
         return [
-            checkAndcompileQRString(
+            ...checkAndcompileQRString(
                 BICPlaceholder,
                 TOPlaceholder,
                 ACCOUNTPlaceholder,
@@ -57,7 +63,7 @@ export const getStringFromForm = (form: EventTarget): [string, boolean] => {
         ];
     }
     return [
-        checkAndcompileQRString(
+        ...checkAndcompileQRString(
             BICValue,
             TOValue,
             ACCOUNTValue,

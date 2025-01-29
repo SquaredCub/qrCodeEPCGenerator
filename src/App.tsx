@@ -15,11 +15,14 @@ function App() {
     const handleGenerate = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const target = e.target;
-        try {
-            // If whole form is empty, we used the placeholders
-            const [compiledString, usedPlaceholders] =
-                getStringFromForm(target);
+        // If whole form is empty, we used the placeholders
+        const [compiledString, errors, usedPlaceholders] =
+            getStringFromForm(target);
 
+        if (errors.length) {
+            alert(errors.join("\n"));
+            return;
+        } else {
             const canvas = canvasRef.current;
             if (canvas) {
                 await toDataURL(canvas, compiledString, {
@@ -33,8 +36,6 @@ function App() {
                 warningRef.current?.classList.remove("visible");
             }
             logoRef.current?.classList.add("visible");
-        } catch (e) {
-            console.error(e);
         }
     };
 
